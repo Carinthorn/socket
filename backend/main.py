@@ -1,18 +1,22 @@
-from flask import Flask 
-from flask_socketio import SocketIO, send
-
+from flask import Flask,jsonify
+from backend.database.dbconnection import sendMessage
+from database.dbconnection import getMessage
+import json
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
-socketio = SocketIO(app, cors_allowed_origins='*')
 
-@socketio.on('message')
-def handleMessage(msg):
-	print('Message: ' + msg)
-	send(msg, broadcast=True)
+
+@app.route('/get/<roomId>', methods=['GET'])
+def test(roomId=0):
+    return jsonify(getMessage(roomId))
+
+@app.route('send/<roomId>', methods=['POST'])
+def test(roomId=0):
+    return jsonify(sendMessage(roomId, "hello"))
 
 if __name__ == '__main__':
-	print(app)
-	socketio.run(app)
+	app.run(threaded=True, port=5050)
+
 
 # 	from flask import Flask, render_template, request, redirect, url_for, session
 # from flask_socketio import SocketIO, join_room, leave_room, emit
