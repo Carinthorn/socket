@@ -1,2 +1,6 @@
 venv
 .env
+__pycache__
+settings.json
+package-lock.json
+dbconnection.cpython-310.pyc

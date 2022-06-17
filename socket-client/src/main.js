@@ -1,13 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
-import BootstrapVue from 'bootstrap-vue'
+import axios from 'axios'
 
 
 Vue.config.productionTip = false
 
-Vue.use(BootstrapVue)
+Vue.use(axios)
 
-import './scss/main.scss'
+import vuetify from './plugins/vuetify'
 new Vue({
-  render: h => h(App),
+  vuetify,
+  render: h => h(App)
 }).$mount('#app')
+
+

@@ -1,4 +1,5 @@
 from operator import imod
+from bson import ObjectId
 import pymongo
 import os
 from dotenv import load_dotenv
@@ -8,18 +9,20 @@ import json
 load_dotenv()
 
 myclient = pymongo.MongoClient(os.getenv('URI'))
+database = myclient["chatapp"]
 
 
-def sendMessage(roomId,msg):
-    rooms = myclient["chatapp"]["room"]
-    rooms.update({'roomId': roomId}, {'$push': {'messages': {
-        'user':'pete',
-        'message': msg,
-        'time_stamp':'10/10/2010'
-    }}})
-
-    
-            
+def sendMessage(roomId, msg):
+    rooms = database["room"]
+    rooms.update_one(
+        {"room_id": str(roomId)},
+        {"$push":
+         {"messages": {
+             "user": "pete",
+             "message": "hasdasdasd",
+             "time_stamp": "10/10/2010"
+         }}})
+    print(rooms.find_one({"room_id":str(roomId)}))
 
 
 def getMessage(roomId):
@@ -31,7 +34,7 @@ def getMessage(roomId):
             for j in i['messages']:
                 msg += [j]
             return msg
-    return "not found"
+    return
 
 
-sendMessage("12345", "hiiiiiiiiiiiiiiiiiiiii")
+sendMessage("12345", "asdasd")

@@ -1,16 +1,18 @@
 from flask import Flask,jsonify
-from backend.database.dbconnection import sendMessage
+from database.dbconnection import sendMessage
 from database.dbconnection import getMessage
-import json
+from flask_cors import CORS, cross_origin
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['SECRET_KEY'] = 'mysecret'
 
 
 @app.route('/get/<roomId>', methods=['GET'])
-def test(roomId=0):
+def get(roomId=0):
     return jsonify(getMessage(roomId))
 
-@app.route('send/<roomId>', methods=['POST'])
+@app.route('/send/<roomId>', methods=['POST'])
 def test(roomId=0):
     return jsonify(sendMessage(roomId, "hello"))
 

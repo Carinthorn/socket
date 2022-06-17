@@ -1,27 +1,38 @@
 <template>
-  <b-container fluid>
-      <LoginModal msg="Welcome to Your Vue.js App" />
-  </b-container>
+  <v-app>
+    <v-main class="main">
+      <chat-vue class="mt-12"/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import LoginModal from "./components/Login.vue";
+import ChatVue from './components/Chat.vue';
+
 
 export default {
-  name: "App",
+  name: 'App',
+
   components: {
-    LoginModal,
+    ChatVue,
   },
+
+  data: () => ({
+    //
+  }),
 };
 </script>
 
 <style>
- b-container {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  background-image: url("./assets/background.jpg");
+.main{
+  background-image: url(./assets/background.jpg);
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
+
 </style>
