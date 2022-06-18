@@ -22,7 +22,7 @@ def sendMessage(roomId, msg):
              "message": "hasdasdasd",
              "time_stamp": "10/10/2010"
          }}})
-    print(rooms.find_one({"room_id":str(roomId)}))
+    print(rooms.find_one({"room_id": str(roomId)}))
 
 
 def getMessage(roomId):
@@ -37,4 +37,37 @@ def getMessage(roomId):
     return
 
 
-sendMessage("12345", "asdasd")
+def thunTest():
+    test = [{
+        "name": "View Rooftop Bar Bangkok",
+        "meal": ["snack"],
+        "price":["$$$", "$$$$"],
+        "location":"220 Petchaburi Road Ratchathewi, Bangkok 10400 Thailand",
+        "type":["western", "american"],
+        "vegan":"no",
+        "imgUri":"https://cdn.discordapp.com/attachments/972401382193778701/983244910142554163/unknown.png",
+        "postback":"https://viewrooftopbarbangkok.com/th/"
+    },
+        {
+        "name": "Water Library Chamchuri",
+        "meal": ["dinner"],
+        "price":["$$$", "$$$$"],
+        "location":"2nd floor, Chamchuri Square Samyan, Bangkok Thailand",
+        "type":["western", "european"],
+        "vegan":"yes",
+        "imgUri":"https://cdn.discordapp.com/attachments/972401382193778701/983245107123875891/unknown.png",
+        "postback":"https://th-th.facebook.com/waterlibrary/"
+    },
+        {
+        "name": "57th Street",
+        "meal": ["breakfast", "lunch", "dinner"],
+        "price":["฿฿฿", "฿฿฿฿"],
+        "location":"2 Sukhumvit Soi 57 Klongtan Nua, Wattana, Bangkok 10110 Thailand",
+        "type":["western", "european"],
+        "vegan":"yes",
+        "imgUri":"https://cdn.discordapp.com/attachments/972401382193778701/983247049057255455/unknown.png",
+        "postback":"https://th-th.facebook.com/waterlibrary/"
+    }
+    ]
+
+    return test

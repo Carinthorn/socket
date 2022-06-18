@@ -1,4 +1,5 @@
-from flask import Flask,jsonify
+from flask import Flask, jsonify
+from database.dbconnection import thunTest
 from database.dbconnection import sendMessage
 from database.dbconnection import getMessage
 from flask_cors import CORS, cross_origin
@@ -12,12 +13,19 @@ app.config['SECRET_KEY'] = 'mysecret'
 def get(roomId=0):
     return jsonify(getMessage(roomId))
 
+
 @app.route('/send/<roomId>', methods=['POST'])
 def test(roomId=0):
     return jsonify(sendMessage(roomId, "hello"))
 
+
+@app.route('/test', methods=['GET'])
+def thun():
+    return jsonify(thunTest())
+
+
 if __name__ == '__main__':
-	app.run(threaded=True, port=5050)
+    app.run(threaded=True, port=5050)
 
 
 # 	from flask import Flask, render_template, request, redirect, url_for, session
