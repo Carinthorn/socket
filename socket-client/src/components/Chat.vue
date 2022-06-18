@@ -57,7 +57,7 @@ export default {
     msg: String,
   },
   data: () => ({
-    rooms: [12345, 456, 789],
+    rooms: [12345, 456, 789, 123],
     alert: false,
     messages: null,
   }),
@@ -72,9 +72,9 @@ export default {
     viewMessages(roomId) {
       axios
         .get("http://localhost:5050/get/" + roomId)
-        .then((response) => {
-          this.messages = response.data;
-          console.log(response.data);
+        .then((res) => {
+          this.messages = res.data;
+            
         })
         .catch((err) => {
           console.log(err);
