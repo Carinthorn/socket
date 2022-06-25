@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from database.dbconnection import createRoom
 from database.dbconnection import thunTest
 from database.dbconnection import sendMessage
 from database.dbconnection import getMessage
@@ -18,6 +19,9 @@ def get(roomId=0):
 def test(roomId=0,msg="",user=""):
     return jsonify(sendMessage(roomId, msg, user))
 
+@app.route('/create_room/<roomId>:<roomName>', methods=['POST'])
+def create(roomId=0,roomName=""):
+    return jsonify(createRoom(roomId, roomName))
 
 @app.route('/test', methods=['GET'])
 def thun():

@@ -1,11 +1,19 @@
 <template>
   <v-container>
-    <v-alert :value="alert" border="top" color="red lighten-2" dark>
+    <!-- <v-alert :value="alert" border="top" color="red lighten-2" dark>
       ฝากน้องธัญเพิ่มห้องให้หน่อยนะะ
-    </v-alert>
+    </v-alert> -->
     <v-row no-gutters>
       <v-col class="sidebar m-1" color="#191D27">
-        <v-card class="mx-auto mt-1" color="#292F3F" dark @click="addRoom()">
+        <v-card style="flex: 2">
+          <v-text-field
+            label="Enter room name"
+            v-model="roomName"
+            hide-details="auto"
+          ></v-text-field>
+        </v-card>
+        <v-btn elevation="2" @click="createRoom()">Create room</v-btn>
+        <!-- <v-card class="mx-auto mt-1" color="#292F3F" dark @click="addRoom()">  -->
           <v-card-actions>
             <v-list-item class="grow">
               <v-list-item-content>
@@ -13,7 +21,7 @@
               </v-list-item-content>
             </v-list-item>
           </v-card-actions>
-        </v-card>
+        <!-- </v-card> -->
         <v-card
           v-for="item in rooms"
           :key="item.index"
@@ -38,7 +46,7 @@
           </v-card-actions>
         </v-card>
         <v-card style="flex: 2">
-        <v-text-field
+          <v-text-field
             label="Name"
             v-model="username"
             hide-details="auto"
@@ -81,7 +89,8 @@ export default {
     alert: false,
     messages: null,
     userMessage: "",
-    username: ""
+    username: "",
+    roomName: ""
   }),
 
   methods: {
@@ -111,6 +120,17 @@ export default {
       })
       this.viewMessages(this.roomId)
       this.userMessage = ""
+    },
+    createRoom(){
+      axios.post("http://localhost:5050/createRoom/"+this.roomId+":"+this.roomName+":"+this.userMessage).then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      this.viewMessages(this.roomId)
+      this.roomName = ""
+
     }
   },
 };

@@ -36,6 +36,13 @@ def getMessage(roomId):
             return msg
     return
 
+def createRoom(roomId, roomName):
+    rooms = database["room"]
+    rooms.insert_one(
+        {"room_id": str(roomId),
+        "room_name": str(roomName),
+        "messages": [] })
+createRoom(123, "thunroom")
 
 def thunTest():
     test = [{
