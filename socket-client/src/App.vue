@@ -1,15 +1,13 @@
 <template>
   <v-app>
     <v-main class="main">
-      <chat-vue class="mt-12"/>
+      <chat-vue class="mt-12" :msg="message" />
     </v-main>
   </v-app>
 </template>
 
 <script>
 import ChatVue from './components/Chat.vue';
-
-
 export default {
   name: 'App',
 
@@ -18,7 +16,7 @@ export default {
   },
 
   data: () => ({
-    //
+    message: "hello from pete"
   }),
 };
 </script>

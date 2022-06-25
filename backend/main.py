@@ -14,9 +14,9 @@ def get(roomId=0):
     return jsonify(getMessage(roomId))
 
 
-@app.route('/send/<roomId>', methods=['POST'])
-def test(roomId=0):
-    return jsonify(sendMessage(roomId, "hello"))
+@app.route('/send/<roomId>:<msg>:<user>', methods=['POST'])
+def test(roomId=0,msg="",user=""):
+    return jsonify(sendMessage(roomId, msg, user))
 
 
 @app.route('/test', methods=['GET'])

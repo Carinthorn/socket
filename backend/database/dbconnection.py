@@ -12,14 +12,14 @@ myclient = pymongo.MongoClient(os.getenv('URI'))
 database = myclient["chatapp"]
 
 
-def sendMessage(roomId, msg):
+def sendMessage(roomId, msg, user):
     rooms = database["room"]
     rooms.update_one(
         {"room_id": str(roomId)},
         {"$push":
          {"messages": {
-             "user": "pete",
-             "message": "hasdasdasd",
+             "user": user,
+             "message": msg,
              "time_stamp": "10/10/2010"
          }}})
     print(rooms.find_one({"room_id": str(roomId)}))
