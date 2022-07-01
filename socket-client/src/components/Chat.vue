@@ -5,23 +5,15 @@
     </v-alert> -->
     <v-row no-gutters>
       <v-col class="sidebar m-1" color="#191D27">
-        <v-card style="flex: 2">
-          <v-text-field
-            label="Enter room name"
-            v-model="roomName"
-            hide-details="auto"
-          ></v-text-field>
+        <v-card class="mx-auto mt-1" color="#292F3F" dark @click="addRoom()"> 
+        <v-card-actions>
+          <v-list-item class="grow">
+            <v-list-item-content>
+              <v-list-item-title>+ {{ msg }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card-actions>
         </v-card>
-        <v-btn elevation="2" @click="createRoom()">Create room</v-btn>
-        <!-- <v-card class="mx-auto mt-1" color="#292F3F" dark @click="addRoom()">  -->
-          <v-card-actions>
-            <v-list-item class="grow">
-              <v-list-item-content>
-                <v-list-item-title>+ {{ msg }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-card-actions>
-        <!-- </v-card> -->
         <v-card
           v-for="item in rooms"
           :key="item.index"
@@ -61,7 +53,7 @@
       </v-col>
       <v-col cols="9" class="ml-1" style="overflow-y: auto; height: 100%">
         <v-app-bar elevation="4" color="#292F3F" class="pa-2 white--text"
-          >Chats room
+          >Chats room no {{roomId}}
         </v-app-bar>
         <v-card
           :key="item.index"
@@ -87,10 +79,10 @@ export default {
     rooms: [12345, 456, 789, 123],
     roomId: "",
     alert: false,
-    messages: null,
+    messages: [],
     userMessage: "",
     username: "",
-    roomName: ""
+    roomName: "",
   }),
 
   methods: {
@@ -100,38 +92,55 @@ export default {
         this.alert = false;
       }, 5000);
     },
-    viewMessages(roomId) {
+    viewMessages(id) {
       axios
-        .get("http://localhost:5050/get/" + roomId)
+        .post("http://localhost:2345/get", {
+          roomId: id,
+        })
+        .then(function (response) {
+          this.messages = response.data
+        })
+        this.roomId = id;
+        console.log(this.messages);
+    },
+    sendMessage() {
+      axios
+        .post(
+          "http://localhost:5050/send/" +
+            this.roomId +
+            ":" +
+            this.userMessage +
+            ":" +
+            this.username
+        )
         .then((res) => {
-          this.messages = res.data;
+          console.log(res);
         })
         .catch((err) => {
           console.log(err);
         });
-      this.roomId = roomId
+      this.viewMessages(this.roomId);
+      this.userMessage = "";
     },
-    sendMessage(){
-      axios.post("http://localhost:5050/send/"+this.roomId+":"+this.userMessage+":"+this.username).then((res) => {
-        console.log(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-      this.viewMessages(this.roomId)
-      this.userMessage = ""
+    createRoom() {
+      axios
+        .post(
+          "http://localhost:5050/createRoom/" +
+            this.roomId +
+            ":" +
+            this.roomName +
+            ":" +
+            this.userMessage
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.viewMessages(this.roomId);
+      this.roomName = "";
     },
-    createRoom(){
-      axios.post("http://localhost:5050/createRoom/"+this.roomId+":"+this.roomName+":"+this.userMessage).then((res) => {
-        console.log(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-      this.viewMessages(this.roomId)
-      this.roomName = ""
-
-    }
   },
 };
 </script>

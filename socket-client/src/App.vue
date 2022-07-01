@@ -1,12 +1,13 @@
 <template>
   <v-app>
     <v-main class="main">
-      <chat-vue class="mt-12" :msg="message" />
+      <chat-vue class="mt-12" />
     </v-main>
   </v-app>
 </template>
 
 <script>
+const io = require('socket.io-client');
 import ChatVue from './components/Chat.vue';
 export default {
   name: 'App',
@@ -16,8 +17,17 @@ export default {
   },
 
   data: () => ({
-    message: "hello from pete"
+    message: [],
+    socket: io('ws://localhost:2345',{
+      transports: ['websocket']
+    })
   }),
+  mounted(){
+    this.socket.on('MESSAGE', (socket) => {
+      this.message = socket
+      console.log(socket)
+    })
+  }
 };
 </script>
 
