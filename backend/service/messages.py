@@ -1,23 +1,15 @@
-
-from database.mongoDB import getDatabase
+from DAL.messagesDAL import getMessagesById, sendMessageFromUser
 import datetime
 
 def getMessages(data):
-    room = getDatabase()['room']
-    messages = room.find_one({"room_id": str(data['roomId'])})
-    if messages is None: 
-        return {'description':'not found'}
-    return messages['messages']
+    id = data['roomId']
+    return getMessagesById(id)
 
 
 def sendMessage(data):
-    rooms = getDatabase()['room']
-    rooms.update_one(
-        {"room_id": str(data['roomId'])},
-        {"$push":
-         {"messages": {
-             "user": data['user'],
-             "message": data['message'],
-             "time_stamp": datetime.datetime.now()
-         }}})
-    return {'status':'success'}
+    roomId = data['roomId']
+    user = data['user']
+    message = data['message']
+    contry = data['contry']
+    time = datetime.datetime.now()
+    return sendMessageFromUser(roomId, user, message, time)
