@@ -1,18 +1,56 @@
 <template>
   <v-container>
-    <!-- <v-alert :value="alert" border="top" color="red lighten-2" dark>
-      ฝากน้องธัญเพิ่มห้องให้หน่อยนะะ
-    </v-alert> -->
     <v-row no-gutters>
-      <v-col class="sidebar m-1" color="#191D27">
-        <v-card class="mx-auto mt-1" color="#292F3F" dark @click="addRoom()"> 
-        <v-card-actions>
-          <v-list-item class="grow">
-            <v-list-item-content>
-              <v-list-item-title>+ {{ msg }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-card-actions>
+      <v-col
+        class="sidebar m-1"
+        color="#191D27"
+        style="overflow-y: auto; height: 100%; position: relative"
+      >
+        <v-card
+          class="mx-auto mt-1"
+          color="#292F3F"
+          dark
+          @click="dialog = true"
+        >
+          <v-card-actions>
+            <v-list-item class="grow">
+              <v-list-item-content>
+                <center>
+                  <v-list-item-title>+ Add room {{ msg }}</v-list-item-title>
+                </center>
+              </v-list-item-content>
+              <v-dialog v-model="dialog" width="500">
+                <v-card>
+                  <v-card-title class="text-h5 grey lighten-2">
+                    Create New Room
+                  </v-card-title>
+
+                  <v-card-text>
+                    <v-text-field
+                      label="Room Id"
+                      v-model="newRoomId"
+                      hide-details="auto"
+                    ></v-text-field>
+
+                    <v-text-field
+                      label="Room name"
+                      v-model="newRoomName"
+                      hide-details="auto"
+                    ></v-text-field>
+                  </v-card-text>
+
+                  <v-divider></v-divider>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" text @click="dialog = false">
+                      create
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-list-item>
+          </v-card-actions>
         </v-card>
         <v-card
           v-for="item in rooms"
@@ -37,24 +75,22 @@
             </v-list-item>
           </v-card-actions>
         </v-card>
-        <v-card style="flex: 2">
-          <v-text-field
-            label="Name"
-            v-model="username"
-            hide-details="auto"
-          ></v-text-field>
-          <v-text-field
-            label="Send chat"
-            v-model="userMessage"
-            hide-details="auto"
-          ></v-text-field>
-        </v-card>
-        <v-btn elevation="2" @click="sendMessage()">send</v-btn>
       </v-col>
-      <v-col cols="9" class="ml-1" style="overflow-y: auto; height: 100%">
-        <v-app-bar elevation="4" color="#292F3F" class="pa-2 white--text"
-          >Chats room no {{roomId}}
-        </v-app-bar>
+      <v-col
+        cols="9"
+        class="ml-1"
+        style="overflow-y: auto; height: 100%; position: relative"
+      >
+        <v-card class="mx-auto mt-1" color="#292F3F" dark style="position: sticky;top: 0;z-index:100;">
+          <v-card-actions>
+            <v-list-item class="grow">
+              <v-list-item-title
+                ><v-btn>delete messages</v-btn> Room Id : {{ roomId }}
+              </v-list-item-title>
+            </v-list-item>
+          </v-card-actions>
+        </v-card>
+
         <v-card
           :key="item.index"
           v-for="item in messages"
@@ -62,6 +98,25 @@
           color="#191d27"
         >
           <p>{{ item.user }} : {{ item.message }}</p>
+        </v-card>
+        <v-card color="#292F3F" dark style="position: sticky; bottom: 0" class="sticky">
+          <v-card-actions>
+            <v-list-item class="grow">
+              <v-card-subtitle>
+                <v-text-field
+                  label="Name"
+                  v-model="username"
+                  hide-details="auto"
+                ></v-text-field>
+              </v-card-subtitle>
+              <v-text-field
+                label="Send chat"
+                v-model="userMessage"
+                hide-details="auto"
+              ></v-text-field>
+              <v-btn elevation="2" @click="sendMessage()">send</v-btn>
+            </v-list-item>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -83,70 +138,38 @@ export default {
     userMessage: "",
     username: "",
     roomName: "",
+    dialog: false,
+    newRoomId: "",
+    newRoomName:""
   }),
 
   methods: {
-    addRoom() {
-      this.alert = true;
-      setTimeout(() => {
-        this.alert = false;
-      }, 5000);
-    },
     viewMessages(id) {
       axios
         .post("http://localhost:2345/get", {
           roomId: id,
         })
-        .then(function (response) {
-          this.messages = response.data
-        })
-        this.roomId = id;
-        console.log(this.messages);
-    },
-    sendMessage() {
-      axios
-        .post(
-          "http://localhost:5050/send/" +
-            this.roomId +
-            ":" +
-            this.userMessage +
-            ":" +
-            this.username
-        )
         .then((res) => {
           console.log(res);
+          this.messages = res.data;
         })
         .catch((err) => {
           console.log(err);
         });
-      this.viewMessages(this.roomId);
-      this.userMessage = "";
-    },
-    createRoom() {
-      axios
-        .post(
-          "http://localhost:5050/createRoom/" +
-            this.roomId +
-            ":" +
-            this.roomName +
-            ":" +
-            this.userMessage
-        )
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      this.viewMessages(this.roomId);
-      this.roomName = "";
+      this.roomId = id;
+      console.log(this.messages);
     },
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
+.sticky{
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+}
 .topbar {
   margin: 5px;
   height: 50px;

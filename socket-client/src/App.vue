@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main class="main">
-      <chat-vue class="mt-12" />
+      <chat-vue v-if="userConnected" class="mt-12" />
     </v-main>
   </v-app>
 </template>
@@ -20,7 +20,8 @@ export default {
     message: [],
     socket: io('ws://localhost:2345',{
       transports: ['websocket']
-    })
+    }),
+    userConnected: true
   }),
   mounted(){
     this.socket.on('MESSAGE', (socket) => {
