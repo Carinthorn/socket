@@ -146,7 +146,7 @@ export default {
   methods: {
     viewMessages(id) {
       axios
-        .post("http://localhost:2345/get", {
+        .post("http://localhost:2345/getMessage", {
           roomId: id,
         })
         .then((res) => {
