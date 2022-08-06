@@ -11,3 +11,8 @@ def createRoom():
 #         "room_name": str(roomName),
 #         "messages": [] })
 # createRoom(123, "thunroom")
+def getRoomsDb():
+    rooms = getDatabase['room']['room_id']
+    print(rooms)
+    return rooms
+    

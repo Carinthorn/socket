@@ -2,6 +2,7 @@ from lib2to3.pgen2 import token
 from flask import Flask, jsonify, make_response, request
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
+from service.rooms import getRoomsDb
 from service.rooms import createRoom
 from service.messages import getMessages,sendMessage
 import jwt
@@ -38,6 +39,9 @@ def client_connect():
     emit('MESSAGE', messages)
     print('client connected')
 
+@app.route('/', methods=['GET'])
+def getRoomsFromRooms():
+    return jsonify(getRoomsDb())
 
 @socketio.on('disconnect')
 def client_disconnect():
@@ -57,6 +61,7 @@ def create():
     return jsonify(createRoom)
 
 
+
 @app.route('/login',methods=['POST'])
 def login():
     token = jwt.encode({'user':request.json['username'],'exp':datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, app.config['SECRET_KEY'])
@@ -65,4 +70,4 @@ def login():
 
 if __name__ == '__main__':
     app.debug = True
-    socketio.run(app, port=2345)
+    socketio.run(app, port=8080)

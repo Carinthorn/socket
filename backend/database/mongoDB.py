@@ -7,3 +7,5 @@ database = client["chatapp"]
 
 def getDatabase():
     return database
+
+

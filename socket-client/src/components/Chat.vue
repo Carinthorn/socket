@@ -81,7 +81,12 @@
         class="ml-1"
         style="overflow-y: auto; height: 100%; position: relative"
       >
-        <v-card class="mx-auto mt-1" color="#292F3F" dark style="position: sticky;top: 0;z-index:100;">
+        <v-card
+          class="mx-auto mt-1"
+          color="#292F3F"
+          dark
+          style="position: sticky; top: 0; z-index: 100"
+        >
           <v-card-actions>
             <v-list-item class="grow">
               <v-list-item-title
@@ -99,7 +104,12 @@
         >
           <p>{{ item.user }} : {{ item.message }}</p>
         </v-card>
-        <v-card color="#292F3F" dark style="position: sticky; bottom: 0" class="sticky">
+        <v-card
+          color="#292F3F"
+          dark
+          style="position: sticky; bottom: 0"
+          class="sticky"
+        >
           <v-card-actions>
             <v-list-item class="grow">
               <v-card-subtitle>
@@ -131,7 +141,7 @@ export default {
     msg: String,
   },
   data: () => ({
-    rooms: [12345, 456, 789, 123],
+    rooms: [],
     roomId: "",
     alert: false,
     messages: [],
@@ -140,15 +150,13 @@ export default {
     roomName: "",
     dialog: false,
     newRoomId: "",
-    newRoomName:""
+    newRoomName: "",
   }),
 
   methods: {
     viewMessages(id) {
       axios
-        .post("http://localhost:2345/getMessage", {
-          roomId: id,
-        })
+        .post("http://localhost:2345/getMessage", { roomId: id })
         .then((res) => {
           console.log(res);
           this.messages = res.data;
@@ -159,13 +167,24 @@ export default {
       this.roomId = id;
       console.log(this.messages);
     },
+    getRooms() {
+      axios
+        .get("http://localhost:8080/")
+        .then((response) => {
+          this.rooms = response;
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.sticky{
+.sticky {
   position: -webkit-sticky;
   position: sticky;
   bottom: 0;
